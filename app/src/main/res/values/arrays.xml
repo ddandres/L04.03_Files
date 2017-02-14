@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017. David de Andrés and Juan Carlos Ruiz, DISCA - UPV, Development of apps for mobile devices.
+  -->
+
+<resources>
+    <!--Spinner options-->
+    <string-array name="storage_access_array">
+        <item>@string/app_resources</item>
+        <item>@string/app_internal_storage</item>
+        <item>@string/app_external_storage</item>
+        <item>@string/public_external_storage</item>
+    </string-array>
+</resources>

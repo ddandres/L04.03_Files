@@ -1,0 +1,2 @@
+This is a resource file for this app.
+There is no way to modify its contents.

@@ -1,0 +1,24 @@
+<!--
+  ~ Copyright (c) 2017. David de Andrés and Juan Carlos Ruiz, DISCA - UPV, Development of apps for mobile devices.
+  -->
+
+<resources>
+
+    <!--Strings related to the interface-->
+    <string name="app_name">L04.03_Files</string>
+    <string name="load_button">Load</string>
+    <string name="save_button">Save</string>
+    <string name="hint_file">File is empty, write whatever you want.</string>
+
+    <!--Spinner options-->
+    <string name="app_resources">Application resources</string>
+    <string name="app_internal_storage">Application internal storage</string>
+    <string name="app_external_storage">Application external storage</string>
+    <string name="public_external_storage">Public external storage (DOWNLOAD)</string>
+
+    <!--Messages to notify the user about problems found-->
+    <string name="file_not_found">The file does not exist yet</string>
+    <string name="io_file_error">Error reading the file</string>
+    <string name="external_memory_not_mounted">External memory is not mounted</string>
+    <string name="permission_denied">The user has not granted permissions to access the external memory</string>
+</resources>

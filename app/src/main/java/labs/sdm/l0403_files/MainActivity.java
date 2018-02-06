@@ -51,9 +51,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Get references to the View
-        etFileContent = (EditText) findViewById(R.id.etFileContent);
-        bSave = (Button) findViewById(R.id.bSave);
-        spinner = (Spinner) findViewById(R.id.spinner);
+        etFileContent = findViewById(R.id.etFileContent);
+        bSave = findViewById(R.id.bSave);
+        spinner = findViewById(R.id.spinner);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -205,9 +205,11 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
 
-            // Append all lines read from the file into a StringBuilder
-            while ((line = reader.readLine()) != null) {
-                builder.append(line);
+            if (reader != null) {
+                // Append all lines read from the file into a StringBuilder
+                while ((line = reader.readLine()) != null) {
+                    builder.append(line);
+                }
             }
             // Display the file contents in the EditText
             etFileContent.setText(builder.toString());
@@ -267,9 +269,11 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
 
-            // Write to file
-            writer.write(etFileContent.getText().toString());
-            writer.flush();
+            if (writer != null) {
+                // Write to file
+                writer.write(etFileContent.getText().toString());
+                writer.flush();
+            }
 
         } catch (FileNotFoundException e) {
             Toast.makeText(this, R.string.file_not_found, Toast.LENGTH_SHORT).show();

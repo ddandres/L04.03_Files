@@ -25,6 +25,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("labs.sdm.l0403_files", appContext.getPackageName());
+        assertEquals("labs.dadm.l0403_files", appContext.getPackageName());
     }
 }

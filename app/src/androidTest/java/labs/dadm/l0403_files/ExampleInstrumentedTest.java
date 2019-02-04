@@ -1,4 +1,8 @@
-package labs.sdm.l0403_files;
+/*
+ * Copyright (c) 2019. David de Andrés and Juan Carlos Ruiz, DISCA - UPV, Development of apps for mobile devices.
+ */
+
+package labs.dadm.l0403_files;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -7,7 +11,7 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Instrumentation test, which will execute on an Android device.

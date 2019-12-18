@@ -2,7 +2,7 @@
   ~ Copyright (c) 2017. David de Andrés and Juan Carlos Ruiz, DISCA - UPV, Development of apps for mobile devices.
   -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
@@ -24,43 +24,37 @@
 
 
     <Button
-        android:id="@+id/bLoad"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:onClick="loadFile"
-        android:text="@string/load_button"
-        app:layout_constraintEnd_toStartOf="@+id/bSave"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner" />
-
-    <Button
         android:id="@+id/bSave"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:enabled="false"
         android:onClick="saveFile"
         android:text="@string/save_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/bLoad"
-        app:layout_constraintTop_toBottomOf="@+id/spinner" />
-
+        app:layout_constraintTop_toBottomOf="@+id/etFileContent" />
 
     <EditText
         android:id="@+id/etFileContent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="@string/hint_file"
+        android:importantForAutofill="no"
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bLoad" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
-</android.support.constraint.ConstraintLayout>
+    <GridView
+        android:id="@+id/gvImages"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:numColumns="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bSave" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -49,6 +49,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -109,11 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Resources cannot be overwritten,
                 // so the Save button is disabled when Resources are selected
-                if (position == RESOURCES) {
-                    bSave.setEnabled(false);
-                } else {
-                    bSave.setEnabled(true);
-                }
+                bSave.setEnabled(position != RESOURCES);
             }
 
             @Override
@@ -247,10 +244,8 @@ public class MainActivity extends AppCompatActivity {
                 // Check the external memory is readable and, if required,
                 // that the user has granted permission for reading it (if API < 19)
                 if (isExternalMemoryReadable()) {
-                    if ((Build.VERSION.SDK_INT < 19) ||
+                    if ((Build.VERSION.SDK_INT > 19) ||
                             checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, READ_PUBLIC_OTHER_STORAGE)) {
-                        readFile(READ_PUBLIC_OTHER_STORAGE);
-                    } else {
                         readFile(READ_PUBLIC_OTHER_STORAGE);
                     }
                 } else {
@@ -404,7 +399,7 @@ public class MainActivity extends AppCompatActivity {
     private void writeFile(int operation) {
 
         BufferedWriter writer = null;
-        final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TIME_FORMAT, Locale.US);
 
         try {
             // Open the required Writer according to the selected destination file
@@ -552,17 +547,19 @@ public class MainActivity extends AppCompatActivity {
             case WRITE_PUBLIC_OTHER_STORAGE:
                 if (Activity.RESULT_OK == resultCode) {
                     try {
-                        // Get a file descriptor to write data in the provided URI
-                        final ParcelFileDescriptor pfd =
-                                getContentResolver().openFileDescriptor(data.getData(), "w");
-                        // FileOutputStream to write to the FileDescriptor
-                        final FileOutputStream fos = new FileOutputStream(pfd.getFileDescriptor());
-                        // Write the content of the EditText as bytes
-                        fos.write(etFileContent.getText().toString().getBytes());
-                        // Flush and close the streams and descriptors
-                        fos.flush();
-                        fos.close();
-                        pfd.close();
+                        if (data != null) {
+                            // Get a file descriptor to write data in the provided URI
+                            final ParcelFileDescriptor pfd =
+                                    getContentResolver().openFileDescriptor(data.getData(), "w");
+                            // FileOutputStream to write to the FileDescriptor
+                            final FileOutputStream fos = new FileOutputStream(pfd.getFileDescriptor());
+                            // Write the content of the EditText as bytes
+                            fos.write(etFileContent.getText().toString().getBytes());
+                            // Flush and close the streams and descriptors
+                            fos.flush();
+                            fos.close();
+                            pfd.close();
+                        }
                     } catch (FileNotFoundException fnfe) {
                         fnfe.printStackTrace();
                     } catch (IOException ioe) {
@@ -575,23 +572,25 @@ public class MainActivity extends AppCompatActivity {
             case READ_PUBLIC_OTHER_STORAGE:
                 if (Activity.RESULT_OK == resultCode) {
                     try {
-                        StringBuilder builder = new StringBuilder();
-                        String line;
-                        // Get a file descriptor to read data from the provided URI
-                        final ParcelFileDescriptor pfd =
-                                getContentResolver().openFileDescriptor(data.getData(), "r");
-                        // BufferedReader to read from the FileDescriptor
-                        final BufferedReader reader =
-                                new BufferedReader(new FileReader(pfd.getFileDescriptor()));
-                        // Get the content of the file line by line
-                        while ((line = reader.readLine()) != null) {
-                            builder.append(line);
+                        if (data != null) {
+                            StringBuilder builder = new StringBuilder();
+                            String line;
+                            // Get a file descriptor to read data from the provided URI
+                            final ParcelFileDescriptor pfd =
+                                    getContentResolver().openFileDescriptor(data.getData(), "r");
+                            // BufferedReader to read from the FileDescriptor
+                            final BufferedReader reader =
+                                    new BufferedReader(new FileReader(pfd.getFileDescriptor()));
+                            // Get the content of the file line by line
+                            while ((line = reader.readLine()) != null) {
+                                builder.append(line);
+                            }
+                            // Update the EditText with the contents of the file
+                            etFileContent.setText(builder.toString());
+                            // Close the reader and descriptor
+                            reader.close();
+                            pfd.close();
                         }
-                        // Update the EditText with the contents of the file
-                        etFileContent.setText(builder.toString());
-                        // Close the reader and descriptor
-                        reader.close();
-                        pfd.close();
                     } catch (FileNotFoundException fnfe) {
                         fnfe.printStackTrace();
                     } catch (IOException ioe) {

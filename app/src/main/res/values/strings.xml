@@ -24,4 +24,6 @@
     <string name="permission_denied">The user has not granted permissions to access the external memory</string>
     <string name="mediastore_error">Failed to create a new MediaStore record</string>
     <string name="no_app_available">There are no apps able to process the requested file</string>
+    <string name="rationale_title">Why are permissions required?</string>
+    <string name="rationale_message">In order to access external storage you must grant permission to the app.</string>
 </resources>

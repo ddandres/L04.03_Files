@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -625,7 +626,26 @@ public class MainActivity extends AppCompatActivity {
         if (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, permission)) {
             return true;
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{permission}, operation);
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+                // AlertDialog.Builder to help create a custom dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                // Set the title of the dialog
+                builder.setTitle(R.string.rationale_title);
+                // Set the message to be displayed
+                builder.setMessage(R.string.rationale_message);
+                // Set a button for a positive action
+                builder.setPositiveButton(
+                        android.R.string.yes,
+                        (dialog, which) -> ActivityCompat.requestPermissions(this, new String[]{permission}, operation));
+                // Prevent the dialog from being cancelled
+                builder.setCancelable(false);
+                // Create the dialog
+                final AlertDialog dialog = builder.create();
+                // Show the dialog
+                dialog.show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{permission}, operation);
+            }
             return false;
         }
     }

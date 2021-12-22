@@ -28,7 +28,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:enabled="false"
-        android:onClick="saveFile"
         android:text="@string/save_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etFileContent" />

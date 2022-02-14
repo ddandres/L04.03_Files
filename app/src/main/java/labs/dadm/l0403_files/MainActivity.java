@@ -66,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityResultLauncher<Intent> launcherReadPublicOther;
     ActivityResultLauncher<Intent> launcherWritePublicOther;
+    ActivityResultLauncher<String> launcherRequestPermission;
+
+    int operation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +101,32 @@ public class MainActivity extends AppCompatActivity {
                         writePublicOtherStorage(result.getData());
                     }
                 });
+
+        // This callback is called whenever the user dismisses the dialog used to ask for permissions.
+        // Checks whether the user has granted the required permissions and acts accordingly.
+        launcherRequestPermission = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                permissionGranted -> {
+                    if (permissionGranted) {
+                        // Launch the required operation according to the received requestCode
+                        switch (operation) {
+                            case Utils.READ_PRIVATE_EXTERNAL_STORAGE: // Read from application external storage
+                            case Utils.READ_PUBLIC_MEDIA_STORAGE: // Read from public external storage (MEDIA)
+                            case Utils.READ_PUBLIC_OTHER_STORAGE: // Read from public external storage
+                                readFile(operation);
+                                break;
+
+                            case Utils.WRITE_PRIVATE_EXTERNAL_STORAGE: // Write to application external storage
+                            case Utils.WRITE_PUBLIC_MEDIA_STORAGE: // Write to public media storage (Images)
+                            case Utils.WRITE_PUBLIC_OTHER_STORAGE: // Write to public external storage
+                                writeFile(operation);
+                                break;
+                        }
+                    } else {
+                        Toast.makeText(MainActivity.this, R.string.permission_denied, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
 
         // Load data from internal/external storage when an item is selected in the Spinner
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -675,38 +704,11 @@ public class MainActivity extends AppCompatActivity {
                 // Show the dialog
                 dialog.show();
             } else {
-                ActivityCompat.requestPermissions(this, new String[]{permission}, operation);
+                this.operation = operation;
+                launcherRequestPermission.launch(permission);
             }
             return false;
         }
     }
 
-    // This method is called whenever the user dismisses the dialog used to ask for permissions.
-    // Checks whether the user has granted the required permissions and acts accordingly.
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        // Check that permissions have been granted
-        if ((grantResults.length > 0) && (PackageManager.PERMISSION_GRANTED == grantResults[0])) {
-
-            // Launch the required operation according to the received requestCode
-            switch (requestCode) {
-                case Utils.READ_PRIVATE_EXTERNAL_STORAGE: // Read from application external storage
-                case Utils.READ_PUBLIC_MEDIA_STORAGE: // Read from public external storage (MEDIA)
-                case Utils.READ_PUBLIC_OTHER_STORAGE: // Read from public external storage
-                    readFile(requestCode);
-                    break;
-
-                case Utils.WRITE_PRIVATE_EXTERNAL_STORAGE: // Write to application external storage
-                case Utils.WRITE_PUBLIC_MEDIA_STORAGE: // Write to public media storage (Images)
-                case Utils.WRITE_PUBLIC_OTHER_STORAGE: // Write to public external storage
-                    writeFile(requestCode);
-                    break;
-            }
-        } else {
-            Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_SHORT).show();
-        }
-    }
 }
